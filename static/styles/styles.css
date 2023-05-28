@@ -1,0 +1,43 @@
+body {
+    background-color:#202124;
+    margin: 0;
+    padding: 0;
+    margin-top: 40px;
+}
+
+#content-container {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:flex-start;
+    height:400vh;
+}
+
+#webpage-title {
+    text-align:center;
+    color:white;
+    font-family: 'Helvetica';
+    font-weight: bold;
+}
+
+#search {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+#user_input {
+    margin-right:10px;
+    border-radius: 15px;
+    width: 250px;
+    background-color: transparent;
+    border: 1px solid gray;
+    outline: none;
+    padding: 5px;
+    color: white;
+}
+
+#search_button {
+    padding: 5px 10px;
+    margin-top:10px;
+}
