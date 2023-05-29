@@ -9,6 +9,7 @@ Before running the app, ensure you have the following installed:
 - Python 3.x
 - Flask
 - PyLucene
+- Docker
 
 ## Installation
 
@@ -34,17 +35,29 @@ Before running the app, ensure you have the following installed:
   ```
   export FLASK_APP=main.py
   ```
+  
+5. Pull the Docker image:
+
+  ```
+  docker pull coady/pylucene
+  ```
 
 ## Usage
 
-1. Start the Flask development server:
+1. Run the pylucene file using Docker:
+
+```
+docker run -it --rm -v $(pwd):/app coady/pylucene python /app/search/search.py
+```
+
+2. Start the Flask development server:
 
 
 The app will be accessible at http://localhost:5000.
 
-2. Open your web browser and navigate to the provided URL.
+3. Open your web browser and navigate to the provided URL.
 
-3. Use the web interface to search and retrieve Reddit data.
+4. Use the web interface to search and retrieve Reddit data.
 
 ## Contributing
 
