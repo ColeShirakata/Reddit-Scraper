@@ -74,13 +74,13 @@ def index(input_dir, dir):
         # html_title = dictionary.get("html_title")
 
         doc = Document()
-        doc.add(Field('title', title, metaType2))
-        doc.add(Field('body', body, metaType3))
-        doc.add(Field('id', id, metaType1))
-        doc.add(Field('url', url, metaType1))
-        doc.add(Field('created_utc', created_utc, metaType2))
-        doc.add(Field('score', score, metaType2))
-        doc.add(Field('permalink', permalink, metaType1))
+        doc.add(Field('title', title, TextField.TYPE_STORED)) #Indexed, tokenized, stored.
+        doc.add(Field('body', body, TextField.TYPE_NOT_STORED)) #Indexed, tokenized, not stored
+        doc.add(Field('id', id,  StringField.TYPE_STORED)) #Indexed, not tokenized, stored
+        doc.add(Field('url', url, StringField.TYPE_STORED)) #Indexed, not tokenized, stored
+        doc.add(Field('created_utc', str(created_utc), TextField.TYPE_STORED)) #Indexed, tokenized, stored.
+        doc.add(Field('score', score, TextField.TYPE_STORED)) #Indexed, tokenized, stored.
+        doc.add(Field('permalink', permalink, StringField.TYPE_STORED)) #Indexed, not tokenized, stored
         # doc.add(Field('comments', comments, metaType1))
 
         writer.addDocument(doc)
