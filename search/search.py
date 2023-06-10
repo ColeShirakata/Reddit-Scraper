@@ -87,4 +87,6 @@ def index(input_dir, dir):
     
     writer.close()
 
-index("reddit_posts", "indexed")
+index_dir = os.path.join(os.path.dirname(os.path.realpath(os.path.dirname(os.path.realpath(__file__)))), "indexed")
+posts_dir = os.path.join(os.path.dirname(os.path.realpath(os.path.dirname(os.path.realpath(__file__)))), "reddit_posts")
+index(posts_dir, index_dir)
