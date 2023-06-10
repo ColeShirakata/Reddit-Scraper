@@ -1,18 +1,56 @@
 <!DOCTYPE HTML>
 <html>
-    <head>
-        <title>Reddit Parser</title>
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/styles.css') }}" />
-    </head>
-    <body>
-        <div id="content-container">
-            <div id="webpage-title">
-                <h1>Reddit Parser</h1>
-            </div>
-            <div id='search'>
-                <input type='text' id='user_input'></input>
-                <button id='search_button'>Search</button>
-            </div>
+<head>
+    <title>Reddit Parser</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/styles.css') }}" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <div id="content-container">
+        <div id="webpage-title">
+            <h1>Reddit Parser</h1>
         </div>
-    </body>
+        <div id='search'>
+            <input type='text' id='user_input'></input>
+            <select id='ordering'>
+                <option value="relevance">Relevance</option>
+                <option value="votes">Votes</option>
+                <option value="time">Time</option>
+                <option value="combination">Combination</option>
+            </select>
+            <input type="range" id="rank_by" name="rank_by" min="0" max="1" step="1" value="0">
+            <label for="rank_by">Rank By: <span id="rank-label">PyLucene</span></label>
+            <button id='search_button' disabled>Search</button>
+        </div>
+        <div id='results'>
+        </div>
+    </div>
+    <script>
+    $(document).ready(function(){
+        $("#user_input").on("input", function() {
+            $("#search_button").prop("disabled", !this.value);
+        });
+        $("#rank_by").on("input", function() {
+            var label = document.getElementById("rank-label");
+            label.innerHTML = this.value == 0 ? "PyLucene" : "PageRank";
+        });
+        $("#search_button").click(function(){
+            var query = $("#user_input").val();
+            var ordering = $("#ordering").val();
+            var rank_by = $("#rank-label").text() == "PyLucene" ? "pyscore" : "pagerank";
+            $.post("/search", { query: query, ordering: ordering, rank_by: rank_by }, function(data, status){
+                var results = "";
+                if (data.length == 0) {
+                    results = "<p>Sorry, our database does not contain any information related to '" + query + "'</p>";
+                } else {
+                    for (var i = 0; i < data.length; i++) {
+                        results += "<p>" + data[i].title + "</p>";
+                    }
+                }
+                $("#results").html(results);
+            });
+        });
+    });
+    </script>
+</body>
 </html>
