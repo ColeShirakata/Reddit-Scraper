@@ -52,41 +52,44 @@ def index(input_dir, dir):
     metaType3.setTokenized(True)
     metaType3.setIndexOptions(IndexOptions.DOCS)
 
-    print(os.listdir(os.path.dirname(os.path.realpath(__file__))))
-    filePath = os.path.join(os.path.dirname(os.path.realpath(os.path.dirname(os.path.realpath(__file__)))), "reddit_posts/ucr_1.json")
-    print(os.listdir(os.path.dirname(os.path.realpath(os.path.dirname(os.path.realpath(__file__))))))
-    with open(filePath, 'r') as handle:
-        text_data = handle.read()
-        text_data = '[' + text_data[1:] + ']'
-        json_data = json.loads(text_data)
+    # print(os.listdir(os.path.dirname(os.path.realpath(__file__))))
+    # filePath = os.path.join(os.path.dirname(os.path.realpath(os.path.dirname(os.path.realpath(__file__)))), "reddit_posts/ucr_1.json")
+    # print(os.listdir(os.path.dirname(os.path.realpath(os.path.dirname(os.path.realpath(__file__))))))
+    
+    for file in os.listdir(input_dir):
+        filePath = os.path.join(input_dir, file)
+        with open(filePath, 'r') as handle:
+            text_data = handle.read()
+            # text_data = '[' + text_data[1:] + ']'
+            json_data = json.loads(text_data)
 
-    for dictionary in json_data:
-        # print(dict.get("name"))
-        title = dictionary.get("title")
-        body = dictionary.get("selftext")
-        id = dictionary.get("id")
-        url = dictionary.get("url")
-        created_utc = dictionary.get("created_utc")
-        score = dictionary.get("score")
-        permalink = dictionary.get("permalink")
-        # comments = dictionary.get("comments")
-        # URLs = dictionary.get("URLs")
-        # html_title = dictionary.get("html_title")
+        for dictionary in json_data:
+            # print(dict.get("name"))
+            title = dictionary.get("title")
+            body = dictionary.get("selftext")
+            id = dictionary.get("id")
+            url = dictionary.get("url")
+            created_utc = dictionary.get("created_utc")
+            score = dictionary.get("score")
+            permalink = dictionary.get("permalink")
+            # comments = dictionary.get("comments")
+            # URLs = dictionary.get("URLs")
+            # html_title = dictionary.get("html_title")
 
-        doc = Document()
-        doc.add(Field('title', title, TextField.TYPE_STORED)) #Indexed, tokenized, stored.
-        doc.add(Field('body', body, TextField.TYPE_NOT_STORED)) #Indexed, tokenized, not stored
-        doc.add(Field('id', id,  StringField.TYPE_STORED)) #Indexed, not tokenized, stored
-        doc.add(Field('url', url, StringField.TYPE_STORED)) #Indexed, not tokenized, stored
-        doc.add(Field('created_utc', str(created_utc), TextField.TYPE_STORED)) #Indexed, tokenized, stored.
-        doc.add(Field('score', score, TextField.TYPE_STORED)) #Indexed, tokenized, stored.
-        doc.add(Field('permalink', permalink, StringField.TYPE_STORED)) #Indexed, not tokenized, stored
-        # doc.add(Field('comments', comments, metaType1))
+            doc = Document()
+            doc.add(Field('title', title, TextField.TYPE_STORED)) #Indexed, tokenized, stored.
+            doc.add(Field('body', body, TextField.TYPE_NOT_STORED)) #Indexed, tokenized, not stored
+            doc.add(Field('id', id,  StringField.TYPE_STORED)) #Indexed, not tokenized, stored
+            doc.add(Field('url', url, StringField.TYPE_STORED)) #Indexed, not tokenized, stored
+            doc.add(Field('created_utc', str(created_utc), TextField.TYPE_STORED)) #Indexed, tokenized, stored.
+            doc.add(Field('score', score, TextField.TYPE_STORED)) #Indexed, tokenized, stored.
+            doc.add(Field('permalink', permalink, StringField.TYPE_STORED)) #Indexed, not tokenized, stored
+            # doc.add(Field('comments', comments, metaType1))
 
-        writer.addDocument(doc)
+            writer.addDocument(doc)
     
     writer.close()
 
 index_dir = os.path.join(os.path.dirname(os.path.realpath(os.path.dirname(os.path.realpath(__file__)))), "indexed")
-posts_dir = os.path.join(os.path.dirname(os.path.realpath(os.path.dirname(os.path.realpath(__file__)))), "reddit_posts")
+posts_dir = os.path.join(os.path.dirname(os.path.realpath(os.path.dirname(os.path.realpath(__file__)))), "FINALJSONS")
 index(posts_dir, index_dir)
