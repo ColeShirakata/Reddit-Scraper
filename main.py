@@ -44,10 +44,12 @@ def search():
     for score_doc in top_docs.scoreDocs:
         doc = index_searcher.doc(score_doc.doc)
         title = doc.get("title")
+        votes = doc.get("score")
         score = score_doc.score
         result = {
             "title": title,
-            "score": score
+            "score": score,
+            "votes": votes
         }
         results.append(result)
 
