@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, jsonify
-
 import lucene
 import os
 from org.apache.lucene.index import DirectoryReader
@@ -11,7 +10,6 @@ from java.nio.file import Paths
 
 app = Flask(__name__)
 
-
 @app.route("/")
 def index(name=None):
     return render_template('index.html', name=name)
@@ -22,8 +20,11 @@ def css():
 
 @app.route("/search", methods=["POST"])
 def search():
-    lucene.initVM(vmargs=['-Djava.awt.headless=true'])
+
+    lucene.getVMEnv().attachCurrentThread()
+
     current_directory = os.path.join(os.path.dirname(os.path.realpath(__file__)), "indexed")
+    
     index_dir = FSDirectory.open(Paths.get(current_directory))
     index_reader = DirectoryReader.open(index_dir)
     index_searcher = IndexSearcher(index_reader)
@@ -49,8 +50,10 @@ def search():
             "score": score
         }
         results.append(result)
-    
+
     return jsonify(results)
+
+lucene.initVM(vmargs=['-Djava.awt.headless=true'])
 
 if __name__ == "__main__":
     app.run()
